@@ -11,6 +11,8 @@ You must have divoom intgration running first: https://github.com/gickowtf/pixoo
 8) copy from bottom right the code
 9) paste it to divoom main settings (where you see page id etc)
 
+To remove pages: delete from intgration first, then delete associated json and gif from pixoo_deigner folders
+
 Pictures are stored in pixoo_media folder this folder can be erased with "settings->clean media"
 Long time pictures for multigif are stored in pixoo_media_gif folder
 
