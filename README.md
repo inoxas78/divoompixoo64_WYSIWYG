@@ -1,6 +1,9 @@
 ☢️ Pixoo Designer OS - Vault-Tec Edition
 L'Éditeur WYSIWYG Ultime et le Moteur de Rendu Avancé pour Divoom Pixoo 64 sous Home Assistant.
 
+Merci à https://github.com/gickowtf/pixoo-homeassistant et à https://github.com/Blueforcer/awtrix3/tree/main pour la base et l'inspiration
+Merci aussi à Gemini 🫣
+
 <img width="1417" height="721" alt="image" src="https://github.com/user-attachments/assets/eb6ce010-1e12-4042-8e16-f4495b784304" />
 
 
