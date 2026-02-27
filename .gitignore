@@ -1,0 +1,25 @@
+# Fichiers système macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Fichiers temporaires ou caches Python (Pyscript)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dossiers de médias Pixoo générés localement 
+# (On ignore leur contenu pour ne pas polluer le repo avec tes tests persos)
+pixoo_media/*
+pixoo_media_gif/*
+pages/*
+
+# Exceptions : on garde un fichier .gitkeep si tu veux que les dossiers 
+# vides existent quand même chez les utilisateurs
+!pixoo_media/.gitkeep
+!pixoo_media_gif/.gitkeep
+!pages/.gitkeep
+
+# Fichiers spécifiques à Home Assistant (sécurité)
+secrets.yaml
+*.db
+*.log
