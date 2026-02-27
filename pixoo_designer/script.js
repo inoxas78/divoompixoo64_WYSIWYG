@@ -1921,7 +1921,8 @@ if (!c) {
         <label class="lbl">Nom de fichier GIF (optionnel — priorité)</label>
         <input id="page-output-input" class="ctl" type="text"
                value="${(page.output_name || "").replace(/"/g, '&quot;')}"
-               placeholder="Ex: conso_maison (sans .gif)" />
+               placeholder="Ex: conso_maison (sans .gif)"
+               oninput="pages[currentPageIndex].output_name = this.value; scheduleYAMLUpdate();" />
 
         <label class="lbl">Refresh (secondes)</label>
         <input id="page-refresh-input" class="ctl ctl-num" type="number"
