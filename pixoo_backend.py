@@ -547,18 +547,23 @@ def _worker_bake_task(recipe, sensor_data):
 
         final_frames.append(base)
 
-    # ===========================================================
+# ===========================================================
     # 6) Save
     # ===========================================================
+    import time
+
     os.makedirs(SAVE_DIR_GIF, exist_ok=True)
+    tmp_path = out_path + ".tmp.gif"
+
     try:
-        if os.path.exists(out_path):
-            os.remove(out_path)
+        if os.path.exists(tmp_path):
+            os.remove(tmp_path)
     except Exception:
         pass
 
+    # On sauvegarde dans le fichier temporaire au lieu du fichier final
     final_frames[0].save(
-        out_path,
+        tmp_path,
         save_all=True,
         append_images=final_frames[1:],
         loop=0,
@@ -566,13 +571,34 @@ def _worker_bake_task(recipe, sensor_data):
         disposal=2,
     )
 
+    # --- LE CORRECTIF ANTI-CRASH EST ICI ---
+    # On n'utilise SURTOUT PAS os.remove(out_path) en premier !
+    # On essaie de remplacer le fichier proprement. S'il est en cours de lecture par le Divoom (verrouillé),
+    # on attend 0.1s et on réessaie, jusqu'à 30 fois (3 secondes d'attente max).
+    success = False
+    for _ in range(30):
+        try:
+            os.replace(tmp_path, out_path)
+            success = True
+            break
+        except Exception:
+            time.sleep(0.1)
+            
+    # Si le fichier est obstinément verrouillé après 3 secondes (très rare), on force le passage
+    if not success:
+        try:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+            os.rename(tmp_path, out_path)
+        except Exception:
+            pass
+            
     try:
         os.chmod(out_path, 0o666)
     except Exception:
         pass
 
-    return f"Cuisson OK: {out_path} (frames={master_count}, anims={len(loaded_anims)})"
-    
+    return f"Cuisson OK: {out_path} (frames={master_count}, anims={len(loaded_anims)})" 
 # ===========================================================
 # PAGE SAVE (json meta)
 # ===========================================================
