@@ -1,0 +1,13 @@
+alias: Pixoo Designer — Recuisson MultiGif (toutes les 30s)
+mode: single
+trigger:
+  - platform: time_pattern
+    seconds: "/30"
+
+condition: []
+
+action:
+  - service: pyscript.pixoo_pages_refresh
+    data:
+      force: true
+      limit: 20
