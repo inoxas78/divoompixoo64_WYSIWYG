@@ -28,7 +28,7 @@ MultiGif : Le mode avancé. Permet de définir un GIF animé en fond et d'y supe
 
 Clock / Weather / Fuel : Raccourcis vers les écrans natifs de l'application Divoom (Horloges officielles, Météo, Prix des carburants).
 
-Image / GIF : Affiche simplement une image fixe ou une animation en plein écran (via une URL locale).
+Image / GIF : Affiche simplement une image fixe ou une animation en plein écran (via une URL locale ou web).
 
 2. Le Mode "Components" (L'Éditeur WYSIWYG)
 C'est le cœur du système. Sélectionnez un outil dans la barre de gauche pour l'ajouter à la zone de dessin (Canvas).
@@ -103,7 +103,7 @@ MultiGif: The advanced mode. Allows you to set an animated GIF background and ov
 
 Clock / Weather / Fuel: Shortcuts to native Divoom app screens (Official Clocks, Weather, Fuel Prices).
 
-Image / GIF: Simply displays a static image or full-screen animation (via a local URL).
+Image / GIF: Simply displays a static image or full-screen animation (via a local URL or web).
 
 2. The "Components" Mode (WYSIWYG Editor)
 This is the core of the system. Select a tool from the left sidebar to add it to the Canvas.
