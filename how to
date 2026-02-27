@@ -1,6 +1,6 @@
 how to?
 You must have divoom intgration running first: https://github.com/gickowtf/pixoo-homeassistant
-
+0) copy lines from configuration.yaml to your configuration.yaml (at the end or adding components if existing data)
 1) copy pixoo_designer folder in www/pixoo_designer
 2) copy pixoo_backend into pyscripts folder (if no create it)
 4) create HA longlife token
@@ -13,3 +13,147 @@ You must have divoom intgration running first: https://github.com/gickowtf/pixoo
 
 Pictures are stored in pixoo_media folder this folder can be erased with "settings->clean media"
 Long time pictures for multigif are stored in pixoo_media_gif folder
+
+☢️ Notice d'Utilisation : Pixoo Designer OS
+Bienvenue dans le terminal de création Pixoo Designer. Cet outil vous permet de concevoir des écrans statiques ou animés pour votre Divoom Pixoo 64 via Home Assistant, en contournant les limites de l'intégration native.
+
+1. Gestion des Pages et Modes de Rendu
+En cliquant sur le bouton [+] dans la barre supérieure, vous créez une nouvelle page. Le système vous demandera de choisir un type :
+
+Components : La page de création libre. Vous partez d'une toile vierge 64x64. Idéal pour des dashboards figés ou des interfaces composées de widgets.
+
+MultiGif : Le mode avancé. Permet de définir un GIF animé en fond et d'y superposer des capteurs HA en temps réel. Nécessite une "cuisson" par le serveur.
+
+Clock / Weather / Fuel : Raccourcis vers les écrans natifs de l'application Divoom (Horloges officielles, Météo, Prix des carburants).
+
+Image / GIF : Affiche simplement une image fixe ou une animation en plein écran (via une URL locale).
+
+2. Le Mode "Components" (L'Éditeur WYSIWYG)
+C'est le cœur du système. Sélectionnez un outil dans la barre de gauche pour l'ajouter à la zone de dessin (Canvas).
+
+Les outils disponibles :
+
+Données : Texte statique, Capteur Home Assistant (Sensor), Heure actuelle (Datetime), Icône météo native.
+
+Media : Icônes animées LaMetric, Image/SVG (Upload local ou Drag & Drop), Icônes Material Design (MDI).
+
+Formes : Rectangles, Rectangles arrondis, Cercles. L'intégration native de HA ne gérant pas nativement les ronds ou les arrondis, lisez bien la section "Figer" ci-dessous.
+
+Progress : Jauges de progression liées à un capteur HA, avec gestion des couleurs conditionnelles (ex: rouge si < 20%).
+
+3. ⚠️ Le concept crucial : "Figer" (Freeze) en Calque
+Pourquoi Figer ?
+L'intégration native divoom_pixoo de Home Assistant est capricieuse. Elle ne comprend que le texte simple, les rectangles basiques et les images statiques. Elle ne comprend pas les icônes MDI, les cercles, les dégradés complexes ou les filtres de couleurs appliqués dans le navigateur.
+
+Comment ça marche ?
+Pour contourner cette limite, Pixoo Designer utilise la rastérisation. Lorsque vous avez terminé de designer une forme complexe, une icône MDI, ou d'appliquer des filtres à une image :
+
+Sélectionnez l'élément.
+
+Dans le panneau de droite, cliquez sur le bouton rose 📸 Figer PNG (ou Figer en Calque).
+
+La magie opère : Le script prend une "photo" invisible de l'élément, l'envoie au serveur HA (qui le stocke dans /config/www/pixoo_media/), et remplace votre élément modifiable par une Image figée au pixel près.
+
+Astuce "Figer Tout" : Si vous avez composé un écran entier avec plein de formes et d'icônes, allez dans le menu système (SYS) en haut à droite et cliquez sur "FIGER TOUT (PNG)". Le système convertira automatiquement tous les éléments non supportés en images prêtes pour Home Assistant.
+
+4. Traitement d'Images (Mode Ultra Custom)
+Lorsque vous importez une image, le panneau de droite affiche des options de traitement d'image (Dithering) pour l'adapter à l'écran LED du Pixoo. Sélectionnez le mode de rendu dans la liste déroulante :
+
+Clean : Nettoie les pixels presque blancs pour éviter les artefacts.
+
+Premium : Applique l'algorithme Floyd-Steinberg avec quantification 3-3-2 (réduit l'image à la palette matérielle exacte du Pixoo pour un rendu optimal).
+
+Portrait : Adoucit l'image avant l'algorithme Premium (idéal pour les visages ou pochettes d'albums).
+
+Ultra Custom : Débloque 8 sliders en direct (Exposition, Contours, Saturation, Flou intelligent, Panoramique, Zoom). Réglez l'image parfaitement, puis cliquez sur 📸 Figer PNG pour valider.
+
+5. Intégration LaMetric et Icônes MDI
+LaMetric : Ajoutez un composant LaMetric, entrez l'ID de l'icône désirée (trouvable dans la bibliothèque intégrée via le bouton "Biblio") et cliquez sur "Charger". L'icône (fixe ou GIF) s'adaptera à la grille.
+
+MDI : Cherchez n'importe quelle icône Material Design, ajustez sa couleur et sa taille. Rappel : N'oubliez pas de la "Figer" avant l'export.
+
+6. Exporter et Publier vers le Pixoo
+La barre supérieure droite contient vos outils de déploiement :
+
+ENVOYER (Test Live) : Pousse immédiatement la page en cours sur le Pixoo pour un test visuel. Le rendu est calculé en temps réel par le script et envoyé via un appel API direct.
+
+PUBLIER (Sauvegarde Définitive) : * Si vous êtes sur une page "Components", cela met à jour le code YAML dans le panneau latéral droit.
+
+Si vous êtes sur une page "MultiGif", cela lance la "Cuisson" (Baking). Le serveur Python va générer le GIF final avec toutes les incrustations, le sauvegarder dans /pixoo_media_gif/, et vous fournir le code YAML final avec l'URL locale à intégrer dans votre configuration Home Assistant.
+
+SYS (Système) : Le menu burger vous permet de sauvegarder le projet complet, de nettoyer les dossiers médias du serveur, ou d'ouvrir le terminal de Debug.
+
+
+
+
+-----------------------------------------------------------------------------------
+
+
+☢️ User Manual: Pixoo Designer OS
+Welcome to the Pixoo Designer creation terminal. This tool allows you to design static or animated screens for your Divoom Pixoo 64 via Home Assistant, bypassing the limits of the native integration.
+
+1. Page Management and Render Modes
+By clicking the [+] button in the top bar, you create a new page. The system will prompt you to choose a type:
+
+Components: The free-form creation page. You start with a blank 64x64 canvas. Ideal for static dashboards or widget-based interfaces.
+
+MultiGif: The advanced mode. Allows you to set an animated GIF background and overlay real-time HA sensors on top of it. Requires server-side "baking".
+
+Clock / Weather / Fuel: Shortcuts to native Divoom app screens (Official Clocks, Weather, Fuel Prices).
+
+Image / GIF: Simply displays a static image or full-screen animation (via a local URL).
+
+2. The "Components" Mode (WYSIWYG Editor)
+This is the core of the system. Select a tool from the left sidebar to add it to the Canvas.
+
+Available Tools:
+
+Data: Static Text, Home Assistant Sensor, Current Time (Datetime), Native Weather Icon.
+
+Media: LaMetric animated icons, Image/SVG (Local upload or Drag & Drop), Material Design Icons (MDI).
+
+Shapes: Rectangles, Rounded Rectangles, Circles. Since HA's native integration does not support circles or rounded corners natively, read the "Freeze" section below carefully.
+
+Progress: Progress bars linked to an HA sensor, with conditional color management (e.g., red if < 20%).
+
+3. ⚠️ The Crucial Concept: "Freeze" (Figer) into a Layer
+Why Freeze?
+The native divoom_pixoo integration in Home Assistant is picky. It only understands simple text, basic rectangles, and static images. It does not understand MDI icons, circles, complex gradients, or color filters applied in the browser.
+
+How does it work?
+To bypass this limit, Pixoo Designer uses rasterization. When you finish designing a complex shape, an MDI icon, or applying filters to an image:
+
+Select the element.
+
+In the right panel, click the pink 📸 Figer PNG (Freeze Layer) button.
+
+Magic happens: The script takes an invisible "photo" of the element, sends it to the HA server (which stores it in /config/www/pixoo_media/), and replaces your editable element with a pixel-perfect frozen Image.
+
+"Freeze All" Tip: If you've composed a whole screen with lots of shapes and icons, go to the system menu (SYS) at the top right and click "FIGER TOUT (PNG)" (Freeze All). The system will automatically convert all unsupported elements into Home Assistant-ready images.
+
+4. Image Processing (Ultra Custom Mode)
+When you import an image, the right panel displays image processing (Dithering) options to adapt it to the Pixoo LED screen. Select the rendering mode from the dropdown list:
+
+Clean: Cleans near-white pixels to avoid artifacts.
+
+Premium: Applies the Floyd-Steinberg algorithm with 3-3-2 quantization (reduces the image to the exact hardware palette of the Pixoo for optimal rendering).
+
+Portrait: Softens the image before the Premium algorithm (ideal for faces or album covers).
+
+Ultra Custom: Unlocks 8 live sliders (Exposure, Edges, Saturation, Smart Blur, Pan, Zoom). Tune the image perfectly, then click 📸 Figer PNG to confirm and save it.
+
+5. LaMetric Integration and MDI Icons
+LaMetric: Add a LaMetric component, enter the desired icon ID (findable in the built-in library via the "Biblio" button) and click "Charger" (Load). The icon (static or GIF) will snap to the grid.
+
+MDI: Search for any Material Design Icon, adjust its color and size. Reminder: Don't forget to "Freeze" it before exporting.
+
+6. Export and Publish to Pixoo
+The top right bar contains your deployment tools:
+
+ENVOYER (Live Test): Instantly pushes the current page to the Pixoo for a visual test. The rendering is calculated in real-time by the script and sent via a direct API call.
+
+PUBLIER (Final Save): * If you are on a "Components" page, this updates the YAML code in the right side panel.
+
+If you are on a "MultiGif" page, this launches the "Baking" (Cuisson). The Python server will generate the final GIF with all overlays, save it in /pixoo_media_gif/, and provide you with the final YAML code featuring the local URL to integrate into your Home Assistant configuration.
+
+SYS (System): The burger menu allows you to save the complete project, clean the media folders on the server, or open the Debug terminal.
