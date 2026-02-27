@@ -1,0 +1,10 @@
+default_config:
+event:
+
+pyscript:
+  allow_all_imports: true
+  hass_is_global: true
+  hass_token: !secret pyscript_hass_token
+  requirements:
+    - pillow
+    - numpy
