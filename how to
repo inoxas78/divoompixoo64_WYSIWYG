@@ -1,0 +1,15 @@
+how to?
+You must have divoom intgration running first: https://github.com/gickowtf/pixoo-homeassistant
+
+1) copy pixoo_designer folder in www/pixoo_designer
+2) copy pixoo_backend into pyscripts folder (if no create it)
+4) create HA longlife token
+5) access to UI from: http://homeassistant.local:8123/local/pixoo_designer/index.html
+6) clic system and config HA, enter your token here
+7) enjoy you creativity
+7bis) preview it in lif and if enyoy it
+8) copy from bottom right the code
+9) paste it to divoom main settings (where you see page id etc)
+
+Pictures are stored in pixoo_media folder this folder can be erased with "settings->clean media"
+Long time pictures for multigif are stored in pixoo_media_gif folder
