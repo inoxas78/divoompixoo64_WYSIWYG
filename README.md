@@ -1,6 +1,9 @@
 ☢️ Pixoo Designer OS - Vault-Tec Edition
 L'Éditeur WYSIWYG Ultime et le Moteur de Rendu Avancé pour Divoom Pixoo 64 sous Home Assistant.
 
+<img width="1417" height="721" alt="image" src="https://github.com/user-attachments/assets/eb6ce010-1e12-4042-8e16-f4495b784304" />
+
+
 Créer des interfaces complexes pour le Divoom Pixoo 64 via Home Assistant se résume souvent à écrire de longs blocs de YAML à l'aveugle. De plus, l'API native souffre de limitations techniques majeures (impossibilité de superposer du texte dynamique sur un GIF animé proprement, couleurs fades, rendu des polices aléatoire).
 
 Pixoo Designer OS résout tout cela. Ce n'est pas seulement un éditeur visuel (WYSIWYG) au style rétro, c'est un véritable moteur de composition d'images et de GIFs (Baking Engine) tournant directement sur votre serveur Home Assistant via Pyscript.
