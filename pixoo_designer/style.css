@@ -1,0 +1,812 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@500;700&display=swap');
+
+:root {
+  /* Palette Fallout Terminal */
+  --bg: #050805;
+  --panel: #0a110a;
+  --panel2: #050805;
+  --border: #143314;
+  --border2: #215c21;
+
+  --txt: #4af626; /* Vert Phosphore brillant */
+  --txt-dark: #050805; /* Texte foncé sur fond vert */
+  --muted: #2e7d32;
+
+  --accent: #4af626;
+  --accent2: #64ffda;
+
+  --danger: #4af626; /* On garde le vert même pour les alertes pour rester dans le thème monochrome */
+  --primary: #4af626;
+  --success: #4af626;
+
+  --grid: rgba(74, 246, 38, 0.08);
+}
+
+/* Scrollbars Retro */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); border-left: 1px solid var(--border); }
+::-webkit-scrollbar-thumb { background: var(--border2); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--txt);
+  font-family: 'Roboto Mono', monospace;
+  overflow: hidden;
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+.topbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+  background: var(--panel);
+  border-bottom: 2px solid var(--accent);
+  z-index: 50;
+}
+
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 12px;
+  color: var(--accent);
+  text-shadow: 0 0 5px rgba(74,246,38,.4);
+  white-space: nowrap;
+}
+.brand i { font-size: 18px; }
+
+.topbar-mid {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 12px;
+  min-width: 300px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* =========================================================
+   BUTTONS / CONTROLS (Sharp edges, retro hover)
+========================================================= */
+.btn {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 0; /* Sharp edges */
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto Mono', monospace;
+  transition: background 0.1s, color 0.1s;
+  user-select: none;
+  white-space: nowrap;
+}
+.btn:hover, .btn.active {
+  background: var(--accent);
+  color: var(--txt-dark);
+  box-shadow: 0 0 8px rgba(74,246,38,.4);
+}
+.btn:active { transform: scale(0.98); }
+.btn i { font-size: 16px; color: inherit; }
+.btn .btn-text { font-weight: 700; font-size: 12px; letter-spacing: .5px; }
+
+.ctl {
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 0;
+  color: var(--txt);
+  padding: 6px 8px;
+  outline: none;
+  font-family: 'Roboto Mono', monospace;
+}
+.ctl:focus { border-color: var(--accent); background: #000; }
+.ctl-num { width: 60px; }
+
+.mini-label {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   BURGER MENU SYSTEM
+========================================================= */
+.burger-container {
+  position: relative;
+}
+.burger-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 240px;
+  background: var(--panel);
+  border: 2px solid var(--accent);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.9);
+  display: none;
+  flex-direction: column;
+  z-index: 9999;
+}
+.burger-dropdown.show {
+  display: flex;
+}
+.burger-dropdown .btn {
+  border: none;
+  border-bottom: 1px solid var(--border2);
+  justify-content: flex-start;
+  padding: 12px;
+}
+.burger-dropdown .btn:last-child { border-bottom: none; }
+.burger-section {
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.retro-hr {
+  border: 0;
+  border-bottom: 1px solid var(--border2);
+  margin: 0;
+}
+
+/* =========================================================
+   PAGEBAR
+========================================================= */
+.pagebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  padding: 6px 10px;
+  width: min(700px, 100%);
+}
+.pagebar-group { display: flex; align-items: center; gap: 6px; }
+.pagebar-wide { flex: 1; }
+#pages-select { min-width: 150px; flex: 1; }
+#page-name { min-width: 120px; flex: 1; }
+.pm-counter {
+  color: var(--accent);
+  font-size: 11px;
+  padding: 0 4px;
+}
+
+/* =========================================================
+   MAIN LAYOUT
+========================================================= */
+.main-layout {
+  display: flex;
+  height: calc(100vh - 64px);
+  overflow: hidden;
+}
+
+/* LEFT SIDEBAR (Compact Blocks) */
+.sidebar {
+  width: 260px; /* Réduit */
+  background: var(--panel);
+  border-right: 1px solid var(--border2);
+  padding: 12px;
+  overflow: auto;
+}
+.prop-header {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin: 10px 0 8px;
+  border-bottom: 1px dashed var(--border2);
+  padding-bottom: 4px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px; /* Plus compact */
+}
+
+.tool-btn {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--txt);
+  padding: 10px 6px;
+  border-radius: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.tool-btn i { font-size: 18px; color: var(--muted); transition: color 0.1s; }
+.tool-btn:hover {
+  background: var(--accent);
+  color: var(--txt-dark);
+  border-color: var(--accent);
+}
+.tool-btn:hover i { color: var(--txt-dark); }
+
+/* CENTER CANVAS */
+.canvas-area {
+  flex: 1;
+  background: #000;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#pixoo-board {
+  position: relative;
+  width: 512px;
+  height: 512px;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 20px rgba(74,246,38,.1);
+  image-rendering: pixelated;
+  background: #000;
+}
+
+.zoom-controls {
+  position: absolute;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  padding: 6px 8px;
+}
+.zoom-label {
+  min-width: 40px;
+  text-align: center;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================================================
+   RIGHT PANEL (PROPERTIES INJECTED BY JS)
+========================================================= */
+.right-panel {
+  width: 320px;
+  background: var(--panel);
+  border-left: 1px solid var(--border2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#properties-panel {
+  flex: 1;
+  padding: 12px;
+  overflow: auto;
+  font-size: 12px;
+}
+.empty-state {
+  color: var(--muted);
+  font-weight: 700;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 9px;
+  line-height: 1.6;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+/* -- UI Générée par le JS (Action Bar, inputs, rows) -- */
+.action-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.icon-btn {
+  flex: 1;
+  height: 28px;
+  border-radius: 0;
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  color: var(--accent);
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+.icon-btn:hover { background: var(--accent); color: var(--txt-dark); }
+
+#properties-panel label {
+  display: inline-block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+#properties-panel input[type="text"],
+#properties-panel input[type="number"],
+#properties-panel select,
+#properties-panel textarea {
+  width: 100%;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--border2);
+  border-radius: 0;
+  padding: 6px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 11px;
+  margin-bottom: 8px;
+  outline: none;
+}
+#properties-panel input:focus,
+#properties-panel select:focus,
+#properties-panel textarea:focus {
+  border-color: var(--accent);
+}
+#properties-panel input[type="color"] {
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  height: 28px;
+  padding: 2px;
+  width: 100%;
+  cursor: pointer;
+}
+#properties-panel .row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+#properties-panel .col { flex: 1; }
+
+/* Blocks internes injectés (div avec bg #222) */
+#properties-panel div[style*="background:#222"] {
+  background: var(--bg) !important;
+  border: 1px dashed var(--border2) !important;
+  border-radius: 0 !important;
+}
+
+/* Ranges (Sliders) Retro */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: transparent;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 8px;
+  background: var(--accent);
+  cursor: pointer;
+  margin-top: -6px;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  cursor: pointer;
+  background: var(--border2);
+}
+
+/* =========================================================
+   YAML & DEBUG
+========================================================= */
+.yaml-container {
+  height: 200px;
+  background: var(--bg);
+  border-top: 2px solid var(--border2);
+  display: flex;
+  flex-direction: column;
+}
+.yaml-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  border-bottom: 1px dashed var(--border2);
+}
+.yaml-title {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+}
+#yaml-output {
+  flex: 1;
+  width: 100%;
+  background: var(--bg);
+  color: var(--accent);
+  border: 0;
+  outline: none;
+  padding: 10px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px;
+  resize: none;
+}
+
+/* =========================================================
+   TERMINAL DEBUG (MODALE VOLANTE)
+========================================================= */
+.debug-console {
+  position: absolute; /* Fini le "fixed" collé en bas */
+  bottom: 20px;
+  left: 20px;
+  width: 600px;
+  height: 300px;
+  background: rgba(5, 8, 5, 0.95); /* Fond très sombre mais légèrement transparent */
+  border: 2px solid var(--accent);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 15px rgba(74, 246, 38, 0.2);
+  z-index: 99998; /* Juste en dessous de LaMetric au cas où */
+  display: flex;
+  flex-direction: column;
+  resize: both; /* Astuce : permet de redimensionner le terminal par le coin bas-droite ! */
+}
+
+.debug-header {
+  padding: 8px 12px;
+  background: var(--accent);
+  color: var(--txt-dark);
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab; /* Indique qu'on peut glisser */
+}
+
+.debug-header:active {
+  cursor: grabbing;
+}
+
+.debug-header button {
+  background: transparent;
+  border: none;
+  color: var(--txt-dark);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Roboto Mono', monospace;
+  transition: transform 0.1s;
+}
+
+.debug-header button:hover {
+  transform: scale(1.2);
+}
+
+.debug-log {
+  flex: 1; /* Prend l'espace restant */
+  overflow: auto;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: var(--accent); /* Texte vert phosphore */
+}
+
+/* Fix Drag Engine Constraints */
+.component i, .component svg, .component img { pointer-events: none; }
+body.dragging { user-select: none; cursor: crosshair; }
+#pixoo-board, .component, .resizer { touch-action: none; }
+
+#pixoo-board { position: relative; }
+.component { position: absolute; pointer-events: auto; }
+.component > * { pointer-events: none; }
+.component .resizer { pointer-events: auto; }
+
+/* Resizer retro */
+.component .resizer {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  cursor: nwse-resize;
+}
+
+/* Sélection */
+.component.selected {
+  outline: 1px solid var(--accent);
+  outline-offset: 1px;
+}
+/* =========================================================
+   FIX BOUTONS PANNEAU DROIT (BLINDÉ CONTRE LE JS)
+========================================================= */
+#properties-panel .tool-btn {
+  flex-direction: row !important;
+  height: auto !important;
+  width: 100% !important;
+  padding: 8px 10px !important;
+  margin-top: 8px !important;
+  
+  /* Look Terminal RobCo garanti */
+  background: var(--bg) !important; 
+  border: 1px solid var(--accent) !important;
+  color: var(--accent) !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 11px !important;
+  letter-spacing: 1px !important;
+  text-align: center !important;
+}
+
+#properties-panel .tool-btn:hover {
+  background: var(--accent) !important;
+  color: var(--txt-dark) !important;
+  box-shadow: 0 0 10px rgba(74, 246, 38, 0.4) !important;
+}
+
+/* Cas particulier pour le bouton "Charger" */
+#properties-panel .row .tool-btn {
+  width: auto !important;
+  margin-top: 0 !important;
+  padding: 6px 12px !important;
+}
+/* =========================================================
+   MODALE RETRO (DRAGGABLE)
+========================================================= */
+.retro-modal-window {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 850px;
+  height: 600px;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 15px rgba(74, 246, 38, 0.2);
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+}
+
+.retro-modal-header {
+  padding: 8px 12px;
+  background: var(--accent); /* Barre de titre verte */
+  color: var(--txt-dark);    /* Texte noir */
+  font-weight: 700;
+  font-family: 'Roboto Mono', monospace;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: grab; /* Curseur "main" pour indiquer qu'on peut glisser */
+}
+
+.retro-modal-header:active {
+  cursor: grabbing; /* Curseur "poing fermé" quand on glisse */
+}
+
+.retro-modal-header button {
+  background: transparent;
+  border: none;
+  color: var(--txt-dark);
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Roboto Mono', monospace;
+  transition: transform 0.1s;
+}
+
+.retro-modal-header button:hover {
+  transform: scale(1.2);
+}
+
+.retro-modal-content {
+  flex: 1;
+  background: #fff; /* Le site LaMetric est blanc, il faut un fond clair pour l'iframe */
+}
+
+.retro-modal-content iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+/* =========================================================
+   LAYERS: HEADER + COLLAPSE
+========================================================= */
+
+.layers-container {
+  border-bottom: 1px solid var(--border2);
+}
+
+.layers-container .layers-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.layers-toggle{
+  padding: 2px 8px;
+  height: 24px;
+  min-width: 34px;
+}
+
+.layer-list{
+  max-height: 180px;         /* ajuste si tu veux plus/moins haut */
+  overflow: auto;
+  padding: 6px 0;
+  transition: max-height 0.15s ease, padding 0.15s ease;
+}
+
+/* état réduit */
+.layers-container.collapsed .layer-list{
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* (optionnel) un minimum de style pour les items si tu veux */
+.layer-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border2);
+  margin-bottom: 6px;
+  background: var(--bg);
+  cursor: pointer;
+  user-select: none;
+}
+
+.layer-item.active{
+  background: var(--accent);
+  color: var(--txt-dark);
+}
+
+.layer-controls{
+  display: flex;
+  gap: 6px;
+}
+
+.layer-btn{
+  border: 1px solid var(--border2);
+  padding: 1px 6px;
+  cursor: pointer;
+}
+
+.layer-btn:hover{
+  background: var(--accent);
+  color: var(--txt-dark);
+}
+/* =========================================================
+   MOTEUR DE THEMES (FALLOUT & HOME ASSISTANT MATERIAL DESIGN)
+   ========================================================= */
+:root {
+  /* THEME FALLOUT (DÉFAUT) */
+  --bg-main: #000000;
+  --bg-panel: #111111;
+  --text-main: #ffffff;
+  --text-muted: #aaaaaa;
+  --accent: #4af626; 
+  --grid-color: rgba(74, 246, 38, 0.4);
+  --radius-btn: 0px;
+  --radius-panel: 0px;
+  --border-style: 1px solid var(--accent);
+  --shadow-panel: none;
+  --transition-speed: 0.3s;
+}
+
+[data-theme="ha-dark"] {
+  /* THEME HA DARK */
+  --bg-main: #111111; 
+  --bg-panel: #1c1c1c; 
+  --text-main: #e1e1e1;
+  --text-muted: #9e9e9e;
+  --accent: #03a9f4; 
+  --grid-color: rgba(3, 169, 244, 0.3);
+  --radius-btn: 8px;
+  --radius-panel: 12px;
+  --border-style: 1px solid rgba(255, 255, 255, 0.05); 
+  /* La vraie ombre d'élévation Material Design de HA : */
+  --shadow-panel: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12); 
+}
+
+[data-theme="ha-light"] {
+  /* THEME HA LIGHT */
+  --bg-main: #f0f0f0; 
+  --bg-panel: #ffffff; 
+  --text-main: #212121;
+  --text-muted: #727272;
+  --accent: #03a9f4;
+  --grid-color: rgba(0, 0, 0, 0.15);
+  --radius-btn: 8px;
+  --radius-panel: 12px;
+  --border-style: 1px solid rgba(0, 0, 0, 0.05);
+  /* Ombre plus douce pour le mode clair : */
+  --shadow-panel: 0px 2px 4px -1px rgba(0,0,0,0.1), 0px 4px 5px 0px rgba(0,0,0,0.05), 0px 1px 10px 0px rgba(0,0,0,0.05);
+}
+
+/* =========================================================
+   APPLICATION GLOBALE DES VARIABLES (OVERRIDES)
+   ========================================================= */
+body, .canvas-area, .main-layout { 
+  background-color: var(--bg-main) !important; 
+  color: var(--text-main) !important; 
+  transition: background var(--transition-speed), color var(--transition-speed); 
+}
+
+/* Transformation en "Cards" (Cartes) */
+.sidebar, .right-panel, .retro-modal-content, .burger-dropdown, .toast { 
+  background-color: var(--bg-panel) !important; 
+  border: var(--border-style) !important; 
+  border-radius: var(--radius-panel) !important;
+  box-shadow: var(--shadow-panel) !important;
+  transition: all var(--transition-speed);
+}
+
+/* Sous-menus / Bloc de propriétés */
+.prop-group {
+  background-color: var(--bg-main) !important; 
+  border: var(--border-style) !important;
+  border-radius: var(--radius-btn) !important;
+  transition: all var(--transition-speed);
+}
+.prop-group > div[style*="background:#222"] {
+  background-color: var(--bg-panel) !important; 
+  border-radius: var(--radius-btn) !important; 
+  border: var(--border-style) !important;
+}
+
+/* Boutons Outlines */
+.tool-btn, .zoom-btn, .icon-btn, .btn-ghost { 
+  color: var(--accent) !important; 
+  border: 1px solid var(--accent) !important; 
+  border-radius: var(--radius-btn) !important;
+  background: transparent !important;
+  transition: all 0.2s ease;
+}
+.tool-btn:hover, .btn-ghost:hover, .zoom-btn:hover, .icon-btn:hover {
+  background-color: var(--accent) !important;
+  color: var(--bg-main) !important;
+}
+
+/* Boutons Pleins (Envoyer / Reset) */
+.btn-primary, .btn-danger { 
+  border-radius: var(--radius-btn) !important; 
+}
+
+/* Formulaires */
+input, select, textarea { 
+  background-color: var(--bg-main) !important; 
+  color: var(--text-main) !important; 
+  border: 1px solid var(--accent) !important; 
+  border-radius: var(--radius-btn) !important;
+  transition: all var(--transition-speed);
+}
+
+/* Décorations textuelles */
+.retro-modal-header, .prop-header, .layers-header { 
+  color: var(--accent) !important; 
+  border-bottom: var(--border-style) !important; 
+}
+.log-line { color: var(--accent) !important; }
+
+/* Le Slider CSS dans la Topbar */
+.theme-slider {
+  appearance: none; width: 50px; height: 12px; background: var(--bg-main); border: 1px solid var(--accent);
+  border-radius: 10px; outline: none; cursor: pointer; transition: 0.3s;
+}
+.theme-slider::-webkit-slider-thumb {
+  appearance: none; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; cursor: pointer;
+}

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pixoo Designer - Vault-Tec Edition</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="brand">
+        <i class="mdi mdi-cube-scan"></i>
+        <span>PIXOO OS v1.0</span>
+      </div>
+    </div>
+
+    <div class="topbar-mid">
+      <div class="pagebar">
+        
+        <div class="theme-slider-wrapper" style="display: flex; align-items: center; gap: 10px; margin-right: 15px;">
+          <span id="theme-label" style="width: 85px; text-align: right; font-size: 11px; color: var(--accent); font-family: 'Roboto Mono', monospace;">☢️ Fallout</span>
+          <input type="range" min="0" max="2" value="0" class="theme-slider" id="theme-slider-input" oninput="updateThemeFromSlider(this.value)">
+        </div>
+
+        <div class="pagebar-group">
+          <button class="btn btn-ghost" onclick="addPage()" title="Ajouter page">
+            <i class="mdi mdi-plus"></i>
+          </button>
+          <button class="btn btn-ghost" onclick="duplicatePage()" title="Dupliquer page">
+            <i class="mdi mdi-content-copy"></i>
+          </button>
+          <button class="btn btn-ghost" onclick="deletePage()" title="Supprimer page">
+            <i class="mdi mdi-delete"></i>
+          </button>
+        </div>
+
+        <div class="pagebar-group pagebar-wide">
+          <select id="pages-select" class="ctl" onchange="gotoPage(parseInt(this.value,10))"></select>
+          <input id="page-name" class="ctl" placeholder="Nom page" oninput="renameCurrentPage(this.value)" />
+        </div>
+
+        <div class="pagebar-group">
+          <div id="pm-counter" class="pm-counter">Page -/-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+
+      <button class="btn btn-primary" onclick="pushPreviewToHA()" title="Envoyer vers Pixoo (YAML live)">
+        <i class="mdi mdi-send"></i><span class="btn-text">ENVOYER</span>
+      </button>
+      <button class="btn btn-success" onclick="publishCurrentMultiGifPage()" title="Mettre à jour le GIF définitif">
+        <i class="mdi mdi-fire"></i>
+        <span class="btn-text">PUBLIER</span>
+      </button>
+      <button class="btn btn-danger" onclick="resetAll()" title="Reset">
+        <i class="mdi mdi-delete"></i><span class="btn-text">RESET</span>
+      </button>
+
+      <div class="burger-container">
+        <button class="btn btn-ghost" id="burger-toggle" onclick="toggleBurgerMenu()" title="Système">
+          <i class="mdi mdi-menu"></i><span class="btn-text">SYS</span>
+        </button>
+
+        <div id="retro-burger-menu" class="burger-dropdown">
+          
+          <div class="burger-section">
+            <div class="mini-label">DURÉE GLOBALE (S)</div>
+            <input type="number" id="global-duration" value="15" class="ctl ctl-num" onchange="generateYAML()" />
+          </div>
+
+          <div class="burger-section">
+            <div class="mini-label">DURÉE PAGE (S)</div>
+            <input id="page-duration" class="ctl ctl-num" type="number" min="1" max="999" onchange="setCurrentPageDuration(this.value)" />
+          </div>
+
+          <hr class="retro-hr">
+
+          <button class="btn btn-ghost" onclick="downloadProject()">
+            <i class="mdi mdi-floppy"></i> SAUVER PROJET
+          </button>
+
+          <button class="btn btn-ghost" onclick="freezeAllUnsupportedUX()">
+            <i class="mdi mdi-camera"></i> FIGER TOUT (PNG)
+          </button>
+
+          <button class="btn btn-ghost" onclick="openConfig()">
+            <i class="mdi mdi-cog"></i> CONFIG HA
+          </button>
+
+          <button class="btn btn-ghost" onclick="cleanPixooMedia()">
+            <i class="mdi mdi-alert"></i> CLEAN MEDIA
+          </button>
+
+          <button class="btn btn-ghost" onclick="toggleDebug()">
+            <i class="mdi mdi-console"></i> TERMINAL DEBUG
+          </button>
+
+          <button class="btn btn-ghost" id="btn-page-yaml" onclick="copyCode()">
+            <i class="mdi mdi-code-tags"></i> COPIER GROUPE PAGES
+          </button>
+
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <div class="main-layout">
+
+    <aside class="sidebar">
+      <div class="prop-header">> DONNÉES</div>
+      <div class="tools-grid">
+        <button class="tool-btn" onclick="addComp('progress')"><i class="mdi mdi-gauge"></i> Progress</button>
+        <button class="tool-btn" onclick="addComp('text')"><i class="mdi mdi-format-text"></i> Texte</button>
+        <button class="tool-btn" onclick="addComp('sensor')"><i class="mdi mdi-flash"></i> Sensor HA</button>
+        <button class="tool-btn" onclick="addComp('datetime')"><i class="mdi mdi-clock-digital"></i> Heure</button>
+        <button class="tool-btn" onclick="addComp('weather')"><i class="mdi mdi-weather-partly-cloudy"></i> Météo</button>
+      </div>
+
+      <div class="prop-header">> MEDIA</div>
+      <div class="tools-grid">
+        <button class="tool-btn" onclick="addComp('lametric')"><i class="mdi mdi-apps"></i> LaMetric</button>
+        <button class="tool-btn" onclick="addComp('image')"><i class="mdi mdi-image"></i> Img/SVG</button>
+        <button class="tool-btn" onclick="addComp('icon')"><i class="mdi mdi-emoticon-happy"></i> Icône MDI</button>
+      </div>
+
+      <div class="prop-header">> FORMES</div>
+      <div class="tools-grid">
+        <button class="tool-btn" onclick="addComp('rect')"><i class="mdi mdi-rectangle-outline"></i> Rect</button>
+        <button class="tool-btn" onclick="addComp('round_rect')"><i class="mdi mdi-shape-rectangle-plus"></i> Arrondi</button>
+        <button class="tool-btn" onclick="addComp('circle')"><i class="mdi mdi-circle-outline"></i> Cercle</button>
+      </div>
+    </aside>
+
+    <main class="canvas-area">
+      <div id="pixoo-board"></div>
+
+      <div class="zoom-controls" style="display: flex; gap: 5px; align-items: center; justify-content: center; margin-top: 15px;">
+        <button class="btn btn-ghost" onclick="toggleGrid()" title="Afficher/Cacher la grille"><i class="mdi mdi-grid"></i></button>
+        <button class="btn btn-ghost" onclick="changeZoom(-1)" title="Zoom Arrière"><i class="mdi mdi-magnify-minus"></i></button>
+        <button class="btn btn-ghost" onclick="autoFitZoom()">FIT</button>
+        <button class="btn btn-ghost" onclick="changeZoom(1)" title="Zoom Avant"><i class="mdi mdi-magnify-plus"></i></button>
+      </div>
+    </main>
+
+    <aside class="right-panel">
+      
+      <div class="layers-container" id="layers-container">
+        <div class="prop-header layers-header" onclick="toggleLayersPanel()" title="Afficher / réduire">
+          <span>> CALQUES (Z-ORDER)</span>
+          <button class="btn btn-ghost layers-toggle" id="layers-toggle-btn" type="button" onclick="event.stopPropagation(); toggleLayersPanel();">
+            <i class="mdi mdi-chevron-up" id="layers-toggle-icon"></i>
+          </button>
+        </div>
+
+        <div id="layer-list" class="layer-list"></div>
+      </div>
+
+      <div id="properties-panel">
+        <div class="empty-state">AUCUN CIBLE DÉTECTÉE.</div>
+      </div>
+
+      <div class="yaml-container">
+        <div class="yaml-header">
+          <div class="yaml-title">> EXPORT YAML</div>
+          <button class="btn btn-ghost" onclick="copyYAML()">COPIER</button>
+        </div>
+        <textarea id="yaml-output" spellcheck="false" readonly></textarea>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <div id="debug-console" class="debug-console" style="display:none;">
+    <div class="debug-header">
+      <div>>_ TERMINAL</div>
+      <button class="btn btn-ghost" onclick="toggleDebug()">[X]</button>
+    </div>
+    <div id="debug-log" class="debug-log"></div>
+  </div>
+  
+  <script src="gif-decoder.js"></script>
+  <script src="fonts.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    function toggleBurgerMenu() {
+      const menu = document.getElementById('retro-burger-menu');
+      menu.classList.toggle('show');
+    }
+    // Fermer le menu si on clique ailleurs
+    document.addEventListener('click', function(event) {
+      const container = document.querySelector('.burger-container');
+      const menu = document.getElementById('retro-burger-menu');
+      if (container && !container.contains(event.target)) {
+        menu.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>
